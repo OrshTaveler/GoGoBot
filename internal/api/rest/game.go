@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 )
 
@@ -45,7 +44,7 @@ type ChallengeRequest struct {
 	InviteOnly      bool   `json:"invite_only"`
 }
 
-func StartGame(accessToken string, playerID float64) {
+func SendChallenge(accessToken string, playerID float64) (float64, error) {
 	data := ChallengeRequest{
 		Initialized:     false,
 		MinRanking:      -1000,
@@ -100,16 +99,39 @@ func StartGame(accessToken string, playerID float64) {
 	}
 	defer resp.Body.Close()
 
-	body, err := io.ReadAll(resp.Body)
+	var result map[string]interface{}
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		return -1, err
+	}
+
+	return result["challenge"].(float64), nil
+
+}
+
+func AcceptChallenge(accessToken string, challengeID int) (float64, error) {
+	url := fmt.Sprintf(
+		"https://online-go.com/api/v1/me/challenges/%d/accept",
+		challengeID,
+	)
+
+	req, err := http.NewRequest("POST", url, nil)
 	if err != nil {
 		panic(err)
 	}
 
-	var pretty bytes.Buffer
-	if err := json.Indent(&pretty, body, "", "  "); err == nil {
-		fmt.Println("Status:", resp.Status)
-		fmt.Println(pretty.String())
-	} else {
-		fmt.Println(string(body))
+	req.Header.Set("Authorization", "Bearer "+accessToken)
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		panic(err)
 	}
+	defer resp.Body.Close()
+
+	var result map[string]interface{}
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		return -1, err
+	}
+
+	return result["game"].(float64), nil
+
 }
