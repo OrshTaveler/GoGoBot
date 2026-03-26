@@ -7,6 +7,9 @@ const PORT = ":8080"
 const REDIRECT_URI = "http://localhost"
 const AUTH_ENDPOINT = "/auth"
 
+const SOCKET_IO_PREFIX = "42"
+const OGS_WEBSOCKET_URL = "wss://online-go.com/socket.io/?transport=websocket"
+
 type Player struct {
 	Token    string
 	Username string

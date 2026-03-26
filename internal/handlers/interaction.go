@@ -5,6 +5,7 @@ import (
 	"gogobot/internal/api/rest"
 	"gogobot/internal/api/shared"
 	"gogobot/internal/session"
+	"gogobot/internal/utils"
 	"net/http"
 )
 
@@ -60,4 +61,12 @@ func (h *Handler) StartGame(w http.ResponseWriter, r *http.Request) {
 		"status":  "game started",
 		"game_id": gameid,
 	})
+}
+
+func (h *Handler) Play(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+
+	moves, _ := utils.ParseSGFMoves("/Users/ubica/GoGoBot/81499963-267-Studenton-regina25.sgf")
+	json.NewEncoder(w).Encode(moves)
 }

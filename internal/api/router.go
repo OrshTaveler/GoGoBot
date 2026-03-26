@@ -17,6 +17,7 @@ func Router(session session.Session) {
 	http.HandleFunc("/session", h.GetAllUsers)
 	http.HandleFunc("/start", h.StartGame)
 	http.HandleFunc("/games", h.GetAllGames)
+	http.HandleFunc("/play", h.Play)
 
 	http.ListenAndServe(shared.PORT, nil)
 }
