@@ -10,4 +10,6 @@ const AUTH_ENDPOINT = "/auth"
 type Player struct {
 	Token    string
 	Username string
+	JWT      string
+	UserId   float64
 }

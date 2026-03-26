@@ -43,3 +43,27 @@ func GetAccessToken(r *http.Request) (string, error) {
 
 	return result["access_token"].(string), nil
 }
+
+func GetJWT(accessToken string) (string, error) {
+	req, _ := http.NewRequest("GET", "https://online-go.com/api/v1/ui/config", nil)
+	req.Header.Set("Authorization", "Bearer "+accessToken)
+
+	resp, err := http.DefaultClient.Do(req)
+	if resp == nil {
+		return "", err
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("response not ok")
+	}
+
+	type usr struct {
+		UserJWT string `json:"user_jwt"`
+	}
+	var config usr
+	json.NewDecoder(resp.Body).Decode(&config)
+
+	return config.UserJWT, nil
+}
