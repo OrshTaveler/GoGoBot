@@ -13,3 +13,10 @@ type Player struct {
 	JWT      string
 	UserId   float64
 }
+
+type Game struct {
+	Player1 Player
+	Player2 Player
+	GameId  int
+	Moves   []string
+}

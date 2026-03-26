@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"gogobot/internal/api/rest"
 	"gogobot/internal/api/shared"
 	"gogobot/internal/session"
@@ -15,19 +14,19 @@ type Handler struct {
 func (h *Handler) AuthHandler(w http.ResponseWriter, r *http.Request) {
 	token, err := rest.GetAccessToken(r)
 	if err != nil {
-		fmt.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	username, userid, err := rest.GetUserInfo(token)
 	if err != nil {
-		fmt.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	jwt, err := rest.GetJWT(token)
 	if err != nil {
-		fmt.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
@@ -43,10 +42,14 @@ func (h *Handler) AuthHandler(w http.ResponseWriter, r *http.Request) {
 			h.Session.Users[i].Token = player.Token
 			h.Session.Users[i].JWT = player.JWT
 
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte("updated"))
 			return
 		}
-
 	}
 
 	h.Session.Users = append(h.Session.Users, player)
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("OK"))
 }

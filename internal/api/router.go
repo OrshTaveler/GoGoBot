@@ -16,6 +16,7 @@ func Router(session session.Session) {
 	http.HandleFunc(shared.AUTH_ENDPOINT, h.AuthHandler)
 	http.HandleFunc("/session", h.GetAllUsers)
 	http.HandleFunc("/start", h.StartGame)
+	http.HandleFunc("/games", h.GetAllGames)
 
 	http.ListenAndServe(shared.PORT, nil)
 }

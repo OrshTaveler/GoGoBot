@@ -21,6 +21,4 @@ func main() {
 
 	api.Router(session)
 
-	fmt.Println(session.Users[0].Username)
-
 }
