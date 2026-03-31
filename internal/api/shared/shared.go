@@ -1,5 +1,7 @@
 package shared
 
+import "github.com/gorilla/websocket"
+
 const CLIENT_ID = "GNLieTm6TsaOJSGIKimALXfC4QNVpFvF1DzWXXxU"
 const CLIENT_SCREET = "fjCqsdMz8kA7Qsgaffh9D4Y99pDYqWwsYPw5tENgRxneUi3BKTwevIpx23p8LXf1aCbtTGG9WVzXF14y9yau8MnSLDgTWFHuMeMGZeFHJWR3FBBH6E7ZE003JBV42Gq5"
 
@@ -15,6 +17,9 @@ type Player struct {
 	Username string
 	JWT      string
 	UserId   float64
+	Connect  *websocket.Conn
+	MoveDone chan bool
+	LastMove int
 }
 
 type Game struct {
