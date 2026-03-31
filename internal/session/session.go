@@ -28,3 +28,12 @@ func GetUserByUsername(session *Session, username string) (*shared.Player, bool)
 	}
 	return nil, false
 }
+
+func GetGameByID(session *Session, id int) (*shared.Game, bool) {
+	for i := range session.Games {
+		if session.Games[i].GameId == id {
+			return &session.Games[i], true
+		}
+	}
+	return nil, false
+}
